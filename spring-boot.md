@@ -247,11 +247,27 @@ Spring boot大致分为四层
 * Service层：实现业务接口和业务逻辑，有时也会分出两个文件夹分别表示接口和实现
 * Controllor层：实现与web前端的交互
 
-<center>
-    <img src="pic/springboot1.png" width="50%" height="50%">
-    <br>
-    <div>springboot结构</div>
-</center>
+这种说法是帮助我们理解，实际操作中并不需要对每层创建文件夹
 
 我们以一个简单的登录应用为例介绍
 
+#### 项目结构
+
+<center>
+    <img src="pic/struc2.png" width="50%" height="50%">
+    <br>
+    <img src="pic/struc1.png" width="50%" height="50%">
+</center>
+
+
+
+
+
+#### 数据库数据
+
+数据库内数据为：
+<center>
+    <img src="pic/database.png" width="50%" height="50%">
+    <br>
+    <div>数据库数据</div>
+</center>
