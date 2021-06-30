@@ -253,7 +253,5 @@ Spring boot大致分为四层
     <div>springboot结构</div>
 </center>
 
-其中Service逻辑由UserMapper.java定义接口，UserServicelmpl.java定义实现
-
-UserMapper.java定义了数据库访问的接口，UserMapper.xml定义与数据库的连接与访问的方式
+我们以一个简单的登录应用为例介绍
 
