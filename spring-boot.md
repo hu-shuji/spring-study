@@ -284,9 +284,9 @@ Spring boot大致分为四层
 #### 项目结构
 
 <center>
-    <img src="pic/struct1.png" width="50%" height="50%">
+    <img src="pic/struc1.png" width="50%" height="50%">
     <br>
-    <img src="pic/struct2.png" width="50%" height="50%">
+    <img src="pic/struc2.png" width="50%" height="50%">
 </center>
 
 我们一一介绍其中的文件与功能
@@ -361,6 +361,15 @@ public class UserServicelmpl implements UserService {
 * templates：设置Web前端。
 
 * applications.properties:设置数据库以及MyBatis
+
+```YML
+spring.datasource.url=jdbc:mysql://localhost:3306/test?autoReconnect=true&autoReconnectForPools=true&useUnicode=true&characterEncoding=utf-8&createDatabaseIfNotExist=true&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+spring.datasource.username=root
+spring.datasource.password=密码
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+mybatis.mapper-locations=classpath:mapper/*.xml
+mybatis.type-aliases-package=com.example.mytest,bean
+```
 
 * MytestServiceTest.java:测试类
 
