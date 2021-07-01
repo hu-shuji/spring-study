@@ -56,8 +56,35 @@ Spring框架采用分层架构，包含Data Access/Intergration,Web,Core Contain
 
 ### Ioc容器
 
-本处参考了 https://www.liaoxuefeng.com/wiki/1252599548343744/1282381977747489   
-我们定义一个在线书店的一些组件,其中Database是总的数据库
+本处参考了 https://www.liaoxuefeng.com/wiki/1252599548343744/1282381977747489   和
+https://jinnianshilongnian.iteye.com/blog/1413846
+
+
+Spring的核心是提供了一个Ioc容器用于管理所有的轻量级JavaBean组件，同时提供一些如生命周期管理，组件装配，AOP支持等服务。 
+
+Ioc意为控制反转，这不是一种技术，而是一种思想。
+
+* 在传统的应用程序中，控制权在程序本身，程序的控制流程完全由开发者控制。  
+* 而在Ioc模式下，控制权由应用程序转移到了Ioc容器，所有的组件统一由Ioc容器进行创建和管理，应用程序只需要使用容器创建配置好的组件即可。
+
+打个比方，我们找女朋友时通常是看到一个心仪的女孩，打听她的各种信息，再想办法认识她。这一过程需要我们自己设计和面对每个环节。
+而Ioc相当于一个婚介所，我们向婚介所提出自己对另一半的要求，婚介所就会向我们提供一个满足条件的男/女孩，我们只需要跟他/她谈就行了。
+
+而DI(依赖注入)和Ioc是对同一概念的不同说法。
+我们从下面几个方面加深对DI的理解
+
+* 应用程序依赖Ioc容器
+* 应用程序中的对象需要Ioc提供资源
+* Ioc将对象需要的资源注入对象
+* Ioc来负责控制对象的生命周期和对象之间的关系
+
+所有的类都会在Ioc容器中登记，告诉容器自己是什么和自己需要什么。容器会在需要的时候将你需要的东西交给你，也可能会把你交给需要你的类。所有类的创建销毁都是由容器控制
+
+
+
+我们用两个个例子来对Ioc和DI进行进一步说明
+
+我们定义一个在线书店的一些组件
 
 * BookService:获取书籍
 * UserService:获取用户
@@ -93,14 +120,6 @@ public class HistoryServlet extends HttpServlet {
 }
 ```
 
-Spring的核心是提供了一个Ioc容器用于管理所有的轻量级JavaBean组件，同时提供一些如生命周期管理，组件装配，AOP支持等服务。 
-
-Ioc意为控制反转。
-
-* 在传统的应用程序中，控制权在程序本身，程序的控制流程完全由开发者控制。  
-* 而在Ioc模式下，控制权由应用程序转移到了Ioc容器，所有的组件统一由Ioc容器进行创建和管理，应用程序只需要使用容器创建配置好的组件即可。
-
-以上面的书店为例，
 在传统模式下我们实例化CartServlet和HistoryServlet需要实例化大量重复的组件。
 
 <div align = center>
@@ -216,6 +235,10 @@ Spring Boot是一种简化spring 项目初始搭建和开发过程的框架，�
 * 提供一些准备好的特性，如应用监控，外部配置等
 * Spring Boot不是借助代码，而是借助条件注解来实现的。
 
+Spring boot通过starter和自动配置简化了Spring的开发
+
+* starter将多个依赖聚合为一个依赖
+
 ### Spring 启动
 
 spring启动流程如下
@@ -243,31 +266,101 @@ spring启动流程如下
 
 Spring boot大致分为四层
 * DAO层：包含数据库访问的接口和实现，有时也用Mapper命名
-* Bean层：数据库表的映射实体类，存放POJO对象
+* Bean层：数据库表的映射实体类，存放POJO对象，有时也用Model命名
 * Service层：实现业务接口和业务逻辑，有时也会分出两个文件夹分别表示接口和实现
 * Controllor层：实现与web前端的交互
 
-这种说法是帮助我们理解，实际操作中并不需要对每层创建文件夹
+分为四层只是帮助我们理解，实际操作中并不需要这么分层
 
 我们以一个简单的登录应用为例介绍
+
+#### 数据库内容  
+
+<center>
+    <img src="pic/database.png" width="50%" height="50%">
+    <br>
+</center>
 
 #### 项目结构
 
 <center>
-    <img src="pic/struc2.png" width="50%" height="50%">
+    <img src="pic/struct1.png" width="50%" height="50%">
     <br>
-    <img src="pic/struc1.png" width="50%" height="50%">
+    <img src="pic/struct2.png" width="50%" height="50%">
 </center>
 
+我们一一介绍其中的文件与功能
 
+* pom.xml：包含项目所需的所有依赖
+* UserBean.java:定义数据库中的类
 
+```Java
+@Data
+public class UserBean {
+    private int id;
+    private String name;
+    private String password;
+    private int score;
+}
+```
 
+* HelloController.java:Web初始界面的设置
+* LoginController.java:Web登录界面的设置
+* UserMapper.java:设置数据库中数据类型的映射类
 
-#### 数据库数据
+```Java
+@Data
+public class UserBean {
+    private int id;
+    private String name;
+    private String password;
+    private int score;
+}
+```
 
-数据库内数据为：
-<center>
-    <img src="pic/database.png" width="50%" height="50%">
-    <br>
-    <div>数据库数据</div>
-</center>
+* UserService.java:设置业务接口，此例中我们定义了一个登录接口
+
+```Java
+public interface UserService {
+    UserBean loginIn(String name,String password);
+}
+```
+
+* UserServicelmpl.java:业务逻辑，此例中为如何登录
+
+```Java
+@Service
+public class UserServicelmpl implements UserService {
+
+    //将DAO注入Service层
+    @Autowired
+    private UserMapper userMapper;
+
+    @Override
+    public UserBean loginIn(String name,String password) {
+        return userMapper.getInfo(name,password);
+    }
+}
+```
+
+* MytestService.java:启动类，用于启动整个项目
+
+* UserMapper.xml：设置与数据库的连接,本例中定义了数据库访问接口访问数据库的具体方法。
+
+```XML
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.mytest.mapper.UserMapper">
+
+    <select id="getInfo" parameterType="String" resultType="com.example.mytest.bean.UserBean">
+        select * From mytest WHERE name=#{name} AND password=#{password}
+    </select>
+</mapper>
+```
+
+* templates：设置Web前端。
+
+* applications.properties:设置数据库以及MyBatis
+
+* MytestServiceTest.java:测试类
+
